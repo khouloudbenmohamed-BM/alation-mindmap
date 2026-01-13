@@ -123,192 +123,95 @@ html {
 <script>
 // Configuration des mindmaps
 const mindmaps = {
-  "Alation Help Center Quick Start": {
-    title: "Alation Help Center Quick Start",
-    data: {
-      content: "Alation Help Center Quick Start",
-      children: [
-        { content: "Overview" },
-        { content: "Community" },
-        { content: "Documentation" }
-      ]
-    }
+  'alation-help': {
+    title: 'Alation Help Center Quick Start',
+    data: {"content":"Alation Help Center Quick Start","children":[{"content":"Alation Help Center Overview","children":[{"content":"Overview of the Alation Help Center","children":[{"content":"Unified Entry Point","children":[{"content":"Serves as a unified entry point to various Alation information resources","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"Allows users to search across multiple platforms simultaneously","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"Integrates content from different sources into a single search experience","children":[],"payload":{"tag":"li","lines":"9,11"}}],"payload":{"tag":"h4","lines":"6,7"}},{"content":"Initial Access","children":[{"content":"Alation Product Documentation","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"Alation Developer Portal","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"Alation University","children":[],"payload":{"tag":"li","lines":"14,16"}}],"payload":{"tag":"h4","lines":"11,12"}}],"payload":{"tag":"h3","lines":"4,5"}}],"payload":{"tag":"h2","lines":"2,3"}}],"payload":{"tag":"h1","lines":"0,1"}}
   },
-
-  "Get to Know Alation": {
-    title: "Get to Know Alation",
-    data: {
-      content: "Get to Know Alation",
-      children: [
-        { content: "What is Alation?" },
-        { content: "Finding Relevant Data" },
-        { content: "Trusting the Data" }
-      ]
-    }
+  
+  // AJOUTEZ VOS NOUVELLES MINDMAPS ICI (N'OUBLIEZ PAS LES VIRGULES)
+  'get-to-know-alation': {
+    title: 'Get to Know Alation',
+    data: {"content":"Get to Know Alation","children":[{"content":"Introduction","children":[]},{"content":"Key Features","children":[]}]}
   },
-
-  "ACS - Data Catalog Basics": {
-    title: "ACS - Data Catalog Basics",
-    data: {
-      content: "ACS - Data Catalog Basics",
-      children: [
-        { content: "Catalog Overview" },
-        { content: "Tags & Documentation" }
-      ]
-    }
+  
+  'acs-data-catalog-basics': {
+    title: 'ACS - Data Catalog Basics',
+    data: {"content":"Data Catalog Basics","children":[{"content":"Topic A","children":[]},{"content":"Topic B","children":[]}]}
   },
-
-  "ACS - Catalog Search": {
-    title: "ACS - Catalog Search",
-    data: {
-      content: "ACS - Catalog Search",
-      children: [
-        { content: "Search Basics" },
-        { content: "Saved Searches" }
-      ]
-    }
+  
+  'acs-catalog-search': {
+    title: 'ACS - Catalog Search',
+    data: {"content":"Catalog Search","children":[{"content":"Search Features","children":[]},{"content":"Advanced Search","children":[]}]}
   },
-
-  "Data Domains": {
-    title: "Data Domains",
-    data: {
-      content: "Data Domains",
-      children: [
-        { content: "Create Domains" },
-        { content: "Domain Members" }
-      ]
-    }
+  
+  'data-domains': {
+    title: 'Data Domains',
+    data: {"content":"Data Domains","children":[{"content":"Domain Structure","children":[]},{"content":"Domain Management","children":[]}]}
   },
-
-  "Customize Your Catalog": {
-    title: "Customize Your Catalog",
-    data: {
-      content: "Customize Your Catalog",
-      children: [
-        { content: "Custom Fields" },
-        { content: "Templates" }
-      ]
-    }
+  
+  'customize-your-catalog': {
+    title: 'Customize Your Catalog',
+    data: {"content":"Customize Your Catalog","children":[{"content":"Customization Options","children":[]},{"content":"Templates","children":[]}]}
   },
-
-  "ACS - Document Hubs": {
-    title: "ACS - Document Hubs",
-    data: {
-      content: "ACS - Document Hubs",
-      children: [
-        { content: "Manage Documents" },
-        { content: "Search" }
-      ]
-    }
+  
+  'acs-document-hubs': {
+    title: 'ACS - Document Hubs',
+    data: {"content":"Document Hubs","children":[{"content":"Hub Overview","children":[]},{"content":"Creating Hubs","children":[]}]}
   },
-
-  "ACS - Catalog Users and Groups": {
-    title: "ACS - Catalog Users and Groups",
-    data: {
-      content: "Users and Groups",
-      children: [
-        { content: "User Roles" },
-        { content: "Groups" }
-      ]
-    }
+  
+  'acs-catalog-users-groups': {
+    title: 'ACS - Catalog Users and Groups',
+    data: {"content":"Catalog Users and Groups","children":[{"content":"User Management","children":[]},{"content":"Group Permissions","children":[]}]}
   },
-
-  "ACS - Home Page Customization": {
-    title: "ACS - Home Page Customization",
-    data: {
-      content: "Home Page Customization",
-      children: [
-        { content: "Custom Blocks" },
-        { content: "Branding" }
-      ]
-    }
+  
+  'acs-home-page-customization': {
+    title: 'ACS - Home Page Customization',
+    data: {"content":"Home Page Customization","children":[{"content":"Layout Options","children":[]},{"content":"Widget Configuration","children":[]}]}
   },
-
-  "Alation Data Steward": {
-    title: "Alation Data Steward",
-    data: {
-      content: "Data Steward",
-      children: [
-        { content: "Stewardship" },
-        { content: "Curation" }
-      ]
-    }
+  
+  'alation-data-steward': {
+    title: 'Alation Data Steward',
+    data: {"content":"Alation Data Steward","children":[{"content":"Steward Roles","children":[]},{"content":"Responsibilities","children":[]}]}
   },
-
-  "ACS - Lineage Overview": {
-    title: "ACS - Lineage Overview",
-    data: {
-      content: "Lineage Overview",
-      children: [
-        { content: "Dataflow Objects" },
-        { content: "Impact Analysis" }
-      ]
-    }
+  
+  'acs-lineage-overview': {
+    title: 'ACS - Lineage Overview',
+    data: {"content":"Lineage Overview","children":[{"content":"What is Lineage","children":[]},{"content":"Lineage Benefits","children":[]}]}
   },
-
-  "ACS - Manual Lineage": {
-    title: "ACS - Manual Lineage",
-    data: {
-      content: "Manual Lineage",
-      children: [
-        { content: "Editor" },
-        { content: "Bulk Upload" }
-      ]
-    }
+  
+  'acs-manual-lineage': {
+    title: 'ACS - Manual Lineage',
+    data: {"content":"Manual Lineage","children":[{"content":"Creating Manual Lineage","children":[]},{"content":"Best Practices","children":[]}]}
   },
-
-  "Writing Queries in Compose": {
-    title: "Writing Queries in Compose",
-    data: {
-      content: "Compose",
-      children: [
-        { content: "Queries" },
-        { content: "Joins" }
-      ]
-    }
+  
+  'writing-queries-compose': {
+    title: 'Writing Queries in Compose',
+    data: {"content":"Writing Queries in Compose","children":[{"content":"Query Basics","children":[]},{"content":"Advanced Queries","children":[]}]}
   },
-
-  "Query Results": {
-    title: "Query Results",
-    data: {
-      content: "Query Results",
-      children: [
-        { content: "Execution" },
-        { content: "Curation" }
-      ]
-    }
+  
+  'query-results': {
+    title: 'Query Results',
+    data: {"content":"Query Results","children":[{"content":"Viewing Results","children":[]},{"content":"Exporting Data","children":[]}]}
   },
-
-  "Suggestion Analytics": {
-    title: "Suggestion Analytics",
-    data: {
-      content: "Suggestion Analytics",
-      children: [
-        { content: "Allie Suggestions" }
-      ]
-    }
+  
+  'suggestion-analytics': {
+    title: 'Suggestion Analytics',
+    data: {"content":"Suggestion Analytics","children":[{"content":"Analytics Overview","children":[]},{"content":"Using Suggestions","children":[]}]}
   },
-
-  "Mastering Alation Analytics": {
-    title: "Mastering Alation Analytics",
-    data: {
-      content: "Alation Analytics",
-      children: [
-        { content: "Users" },
-        { content: "Queries" }
-      ]
-    }
+  
+  'mastering-alation-analytics': {
+    title: 'Mastering Alation Analytics',
+    data: {"content":"Mastering Alation Analytics","children":[{"content":"Analytics Features","children":[]},{"content":"Reporting","children":[]}]}
   },
-
-  "Alation Data Products": {
-    title: "Alation Data Products",
-    data: {
-      content: "Data Products",
-      children: [
-        { content: "YAML Creation" },
-        { content: "Management" }
-      ]
-    }
+  
+  'alation-data-products-marketplace': {
+    title: 'Alation Data Products Marketplace',
+    data: {"content":"Data Products Marketplace","children":[{"content":"Marketplace Overview","children":[]},{"content":"Finding Products","children":[]}]}
+  },
+  
+  'alation-data-products': {
+    title: 'Alation Data Products',
+    data: {"content":"Alation Data Products","children":[{"content":"Product Types","children":[]},{"content":"Creating Products","children":[]}]}
   }
 };
 
