@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>Markmap</title>
+<title>Markmap - Multi Pages</title>
 <style>
 * {
   margin: 0;
@@ -14,20 +14,219 @@ html {
   font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Navigation Menu */
+#nav-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: #1e293b;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+#nav-menu h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 10px;
+}
+
+.nav-item {
+  padding: 12px 15px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+  background: #334155;
+}
+
+.nav-item:hover {
+  background: #475569;
+}
+
+.nav-item.active {
+  background: #3b82f6;
+  font-weight: bold;
+}
+
 #mindmap {
   display: block;
-  width: 100vw;
+  width: calc(100vw - 250px);
   height: 100vh;
+  margin-left: 250px;
 }
+
 .markmap-dark {
   background: #27272a;
   color: white;
+}
+
+/* Toggle button for mobile */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  #nav-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  
+  #nav-menu.open {
+    transform: translateX(0);
+  }
+  
+  #mindmap {
+    width: 100vw;
+    margin-left: 0;
+  }
+  
+  #menu-toggle {
+    display: block;
+  }
 }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css">
 </head>
 <body>
+
+<!-- Navigation Menu -->
+<button id="menu-toggle">☰ Menu</button>
+<nav id="nav-menu">
+  <h2>Mindmaps</h2>
+  <div id="nav-items"></div>
+</nav>
+
+<!-- Mindmap SVG -->
 <svg id="mindmap"></svg>
-<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script><script>(()=>{setTimeout(()=>{const{markmap:S,mm:Q}=window,$=new S.Toolbar;$.attach(Q);const I=$.render();I.setAttribute("style","position:absolute;bottom:20px;right:20px"),document.body.append(I)})})()</script><script>((l,U,M,R)=>{const N=l();window.mm=N.Markmap.create("svg#mindmap",(U||N.deriveOptions)(R),M),window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.classList.add("markmap-dark")})(()=>window.markmap,null,{"content":"Alation Help Center Quick Start","children":[{"content":"Alation Help Center Overview","children":[{"content":"Overview of the Alation Help Center","children":[{"content":"Unified Entry Point","children":[{"content":"Serves as a unified entry point to various Alation information resources","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"Allows users to search across multiple platforms simultaneously","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"Integrates content from different sources into a single search experience","children":[],"payload":{"tag":"li","lines":"9,11"}}],"payload":{"tag":"h4","lines":"6,7"}},{"content":"Initial Access","children":[{"content":"Alation Product Documentation","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"Alation Developer Portal","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"Alation University","children":[],"payload":{"tag":"li","lines":"14,16"}}],"payload":{"tag":"h4","lines":"11,12"}}],"payload":{"tag":"h3","lines":"4,5"}},{"content":"Master the Search Process","children":[{"content":"Use Case Example","children":[{"content":"Finding information on Alation&apos;s APIs to automate a process","children":[],"payload":{"tag":"li","lines":"19,20"}},{"content":"Ensuring best practices are followed","children":[],"payload":{"tag":"li","lines":"20,21"}},{"content":"Full access when logged into the Alation Help Center","children":[],"payload":{"tag":"li","lines":"21,23"}}],"payload":{"tag":"h4","lines":"18,19"}},{"content":"Step 1: Conducting Your Initial Search","children":[{"content":"Enter query (e.g., &quot;Alation API best practices&quot;) into search bar","children":[],"payload":{"tag":"li","lines":"24,25"}},{"content":"Suggested searches appear based on prior usage","children":[],"payload":{"tag":"li","lines":"25,26"}},{"content":"Search results populate from all accessible resources","children":[],"payload":{"tag":"li","lines":"26,27"}},{"content":"Includes Developer Portal and User Documentation","children":[],"payload":{"tag":"li","lines":"27,29"}}],"payload":{"tag":"h4","lines":"23,24"}},{"content":"Step 2: Refining Your Results with Filters","children":[{"content":"Dynamic facets/filters on left side of search results","children":[],"payload":{"tag":"li","lines":"30,31"}},{"content":"Filters appear once a Source is selected","children":[],"payload":{"tag":"li","lines":"31,32"}},{"content":"Click on &quot;Developer APIs&quot; and &quot;Docs&quot; Sources filters","children":[],"payload":{"tag":"li","lines":"32,33"}},{"content":"Focus on most relevant API documentation","children":[],"payload":{"tag":"li","lines":"33,35"}}],"payload":{"tag":"h4","lines":"29,30"}},{"content":"Step 3: Utilizing Visual Cues","children":[{"content":"Green &quot;Recommended&quot; label for highly relevant results","children":[],"payload":{"tag":"li","lines":"36,37"}},{"content":"Machine learning models suggest these results","children":[],"payload":{"tag":"li","lines":"37,38"}},{"content":"Colored source indicators differentiate content origin","children":[],"payload":{"tag":"li","lines":"38,39"}},{"content":"Visual distinction between Developer Portal and Knowledge Base","children":[],"payload":{"tag":"li","lines":"39,41"}}],"payload":{"tag":"h4","lines":"35,36"}},{"content":"Step 4: Rapid Content Assessment with Preview","children":[{"content":"Click &quot;eyeball icon&quot; or &quot;Preview&quot; next to search result","children":[],"payload":{"tag":"li","lines":"42,43"}},{"content":"Opens pop-up window for direct content reading","children":[],"payload":{"tag":"li","lines":"43,44"}},{"content":"No need to navigate away from search results page","children":[],"payload":{"tag":"li","lines":"44,45"}},{"content":"Close pop-up with &quot;X&quot; in top right corner if not relevant","children":[],"payload":{"tag":"li","lines":"45,47"}}],"payload":{"tag":"h4","lines":"41,42"}},{"content":"Benefits","children":[{"content":"Efficient navigation of Alation Help Center","children":[],"payload":{"tag":"li","lines":"48,49"}},{"content":"Comprehensive search with filtering options","children":[],"payload":{"tag":"li","lines":"49,50"}},{"content":"Smart features enhance productivity","children":[],"payload":{"tag":"li","lines":"50,51"}},{"content":"Quick pinpointing of relevant information","children":[],"payload":{"tag":"li","lines":"51,53"}}],"payload":{"tag":"h4","lines":"47,48"}}],"payload":{"tag":"h3","lines":"16,17"}},{"content":"Logging into the Help Center","children":[{"content":"Enhanced Access","children":[{"content":"Unlocks broader range of resources","children":[],"payload":{"tag":"li","lines":"56,57"}},{"content":"Enhanced search outcomes","children":[],"payload":{"tag":"li","lines":"57,59"}}],"payload":{"tag":"h4","lines":"55,56"}},{"content":"Additional Assets","children":[{"content":"Alation Community site","children":[],"payload":{"tag":"li","lines":"60,61"}},{"content":"Alation Ideas Portal","children":[],"payload":{"tag":"li","lines":"61,62"}},{"content":"Knowledge Base","children":[],"payload":{"tag":"li","lines":"62,64"}}],"payload":{"tag":"h4","lines":"59,60"}}],"payload":{"tag":"h3","lines":"53,54"}},{"content":"The Role of the Alation Help Center","children":[{"content":"Centralized Portal","children":[{"content":"Acts as centralized portal for diverse Alation information","children":[],"payload":{"tag":"li","lines":"67,68"}},{"content":"Intelligent search engine spanning multiple platforms","children":[],"payload":{"tag":"li","lines":"68,69"}},{"content":"Efficiently provides relevant content","children":[],"payload":{"tag":"li","lines":"69,70"}},{"content":"Dynamic filters","children":[],"payload":{"tag":"li","lines":"70,72"}}],"payload":{"tag":"h4","lines":"66,67"}},{"content":"More Information","children":[{"content":"Visit: https://help.alation.com","children":[],"payload":{"tag":"li","lines":"73,75"}}],"payload":{"tag":"h4","lines":"72,73"}}],"payload":{"tag":"h3","lines":"64,65"}}],"payload":{"tag":"h2","lines":"2,3"}},{"content":"Alation Community","children":[{"content":"Overview","children":[{"content":"Online hub for Alation customers, employees, and partners","children":[],"payload":{"tag":"li","lines":"78,79"}},{"content":"Platform for interaction and engagement","children":[],"payload":{"tag":"li","lines":"79,80"}},{"content":"Accessible through Alation Help Center","children":[],"payload":{"tag":"li","lines":"80,82"}}],"payload":{"tag":"h3","lines":"77,78"}},{"content":"Community Homepage Layout","children":[{"content":"Left Sidebar","children":[{"content":"Community profile overview","children":[],"payload":{"tag":"li","lines":"85,86"}},{"content":"Contributions and engagement points","children":[],"payload":{"tag":"li","lines":"86,87"}},{"content":"Quick Links to key areas","children":[],"payload":{"tag":"li","lines":"87,88"}},{"content":"My Communities Quick List","children":[],"payload":{"tag":"li","lines":"88,89"}},{"content":"Followed Content tracking","children":[],"payload":{"tag":"li","lines":"89,90"}},{"content":"Recent Blogs","children":[],"payload":{"tag":"li","lines":"90,91"}},{"content":"Community Engagement Leaderboard","children":[],"payload":{"tag":"li","lines":"91,93"}}],"payload":{"tag":"h4","lines":"84,85"}},{"content":"Right Sidebar","children":[{"content":"Quick links menu to Engage with Community","children":[],"payload":{"tag":"li","lines":"94,95"}},{"content":"Latest Announcements","children":[],"payload":{"tag":"li","lines":"95,96"}},{"content":"Monthly Community homepage poll","children":[],"payload":{"tag":"li","lines":"96,97"}},{"content":"Upcoming Events","children":[],"payload":{"tag":"li","lines":"97,99"}}],"payload":{"tag":"h4","lines":"93,94"}},{"content":"Center Area","children":[{"content":"Activity Feed in the middle","children":[],"payload":{"tag":"li","lines":"100,101"}},{"content":"Top bar with various menu options","children":[],"payload":{"tag":"li","lines":"101,102"}},{"content":"Community microsites access","children":[],"payload":{"tag":"li","lines":"102,104"}}],"payload":{"tag":"h4","lines":"99,100"}}],"payload":{"tag":"h3","lines":"82,83"}},{"content":"Search Functionality","children":[{"content":"Search bar for finding specific content","children":[],"payload":{"tag":"li","lines":"105,106"}},{"content":"Queries entire Community site","children":[],"payload":{"tag":"li","lines":"106,107"}},{"content":"Searches various Alation resources through Help Center","children":[],"payload":{"tag":"li","lines":"107,109"}}],"payload":{"tag":"h3","lines":"104,105"}},{"content":"Activity Feed","children":[{"content":"Features","children":[{"content":"Endlessly scrolling feed","children":[],"payload":{"tag":"li","lines":"112,113"}},{"content":"Latest content from Community in one place","children":[],"payload":{"tag":"li","lines":"113,114"}},{"content":"Most recent content displayed at top","children":[],"payload":{"tag":"li","lines":"114,115"}},{"content":"Content populates as you scroll down","children":[],"payload":{"tag":"li","lines":"115,117"}}],"payload":{"tag":"h4","lines":"111,112"}},{"content":"Customization","children":[{"content":"Filter icon for customization","children":[],"payload":{"tag":"li","lines":"118,119"}},{"content":"Specify communities to view","children":[],"payload":{"tag":"li","lines":"119,120"}},{"content":"Select content type","children":[],"payload":{"tag":"li","lines":"120,121"}},{"content":"Apply multiple filters","children":[],"payload":{"tag":"li","lines":"121,122"}},{"content":"Personalize Activity Feed","children":[],"payload":{"tag":"li","lines":"122,124"}}],"payload":{"tag":"h4","lines":"117,118"}}],"payload":{"tag":"h3","lines":"109,110"}},{"content":"Community Microsites","children":[{"content":"Ask Alation Experts","children":[{"content":"Ask and answer technical product questions","children":[],"payload":{"tag":"li","lines":"127,128"}},{"content":"Alation subject matter experts available","children":[],"payload":{"tag":"li","lines":"128,129"}},{"content":"Search previously answered questions","children":[],"payload":{"tag":"li","lines":"129,131"}}],"payload":{"tag":"h4","lines":"126,127"}},{"content":"Community Hub","children":[{"content":"Peer-to-peer knowledge sharing","children":[],"payload":{"tag":"li","lines":"132,133"}},{"content":"Start and join discussions","children":[],"payload":{"tag":"li","lines":"133,134"}},{"content":"Share experiences using Alation","children":[],"payload":{"tag":"li","lines":"134,135"}},{"content":"Topics: Best practices, Alation program experiences, Use cases","children":[],"payload":{"tag":"li","lines":"135,137"}}],"payload":{"tag":"h4","lines":"131,132"}}],"payload":{"tag":"h3","lines":"124,125"}},{"content":"Resources Menu","children":[{"content":"Adoption Resources","children":[{"content":"Overview of Alation Data Culture Body of Knowledge","children":[],"payload":{"tag":"li","lines":"140,141"}},{"content":"Links to various chapters","children":[],"payload":{"tag":"li","lines":"141,142"}},{"content":"Latest Community content on driving adoption","children":[],"payload":{"tag":"li","lines":"142,144"}}],"payload":{"tag":"h4","lines":"139,140"}},{"content":"Alation Briefs Repository","children":[{"content":"Access recordings of past Alation Briefs","children":[],"payload":{"tag":"li","lines":"145,146"}},{"content":"Future sessions in one location","children":[],"payload":{"tag":"li","lines":"146,147"}},{"content":"30-minute virtual events","children":[],"payload":{"tag":"li","lines":"147,148"}},{"content":"Focused information on Alation features","children":[],"payload":{"tag":"li","lines":"148,149"}},{"content":"Best practices and use cases","children":[],"payload":{"tag":"li","lines":"149,151"}}],"payload":{"tag":"h4","lines":"144,145"}}],"payload":{"tag":"h3","lines":"137,138"}},{"content":"Product Menu","children":[{"content":"Product Home","children":[{"content":"Latest Alation product release information","children":[],"payload":{"tag":"li","lines":"154,155"}},{"content":"Product release schedule","children":[],"payload":{"tag":"li","lines":"155,156"}},{"content":"Important product-related notices","children":[],"payload":{"tag":"li","lines":"156,157"}},{"content":"Security advisories","children":[],"payload":{"tag":"li","lines":"157,158"}},{"content":"Recent product announcements","children":[],"payload":{"tag":"li","lines":"158,160"}}],"payload":{"tag":"h4","lines":"153,154"}},{"content":"Latest Showcase &amp; Roadmap","children":[{"content":"Recordings of product management webinars","children":[],"payload":{"tag":"li","lines":"161,162"}},{"content":"Product showcase presentations","children":[],"payload":{"tag":"li","lines":"162,163"}},{"content":"Roadmap information","children":[],"payload":{"tag":"li","lines":"163,165"}}],"payload":{"tag":"h4","lines":"160,161"}}],"payload":{"tag":"h3","lines":"151,152"}},{"content":"Your Profile","children":[{"content":"Profile Overview","children":[{"content":"Information about you","children":[],"payload":{"tag":"li","lines":"168,169"}},{"content":"Community interactions","children":[],"payload":{"tag":"li","lines":"169,171"}}],"payload":{"tag":"h4","lines":"167,168"}},{"content":"My Profile Tab","children":[{"content":"Bio area","children":[],"payload":{"tag":"li","lines":"172,173"}},{"content":"Professional Associations","children":[],"payload":{"tag":"li","lines":"173,174"}},{"content":"Job History","children":[],"payload":{"tag":"li","lines":"174,175"}},{"content":"Honors and Awards","children":[],"payload":{"tag":"li","lines":"175,176"}},{"content":"Topic Interests","children":[],"payload":{"tag":"li","lines":"176,177"}},{"content":"Areas of Expertise","children":[],"payload":{"tag":"li","lines":"177,179"}}],"payload":{"tag":"h4","lines":"171,172"}},{"content":"My Contributions","children":[{"content":"Community engagement points","children":[],"payload":{"tag":"li","lines":"180,181"}},{"content":"Published content","children":[],"payload":{"tag":"li","lines":"181,182"}},{"content":"Drafted content","children":[],"payload":{"tag":"li","lines":"182,183"}},{"content":"Scheduled content","children":[],"payload":{"tag":"li","lines":"183,185"}}],"payload":{"tag":"h4","lines":"179,180"}},{"content":"Contact Information","children":[{"content":"Email: community@alation.com","children":[],"payload":{"tag":"li","lines":"186,188"}}],"payload":{"tag":"h4","lines":"185,186"}}],"payload":{"tag":"h3","lines":"165,166"}}],"payload":{"tag":"h2","lines":"75,76"}},{"content":"Alation User Documentation","children":[{"content":"Overview","children":[{"content":"Also called &quot;Docs&quot;","children":[],"payload":{"tag":"li","lines":"191,192"}},{"content":"Accessible through Alation Help Center","children":[],"payload":{"tag":"li","lines":"192,193"}},{"content":"Accessible from Alation website through Learn Menu","children":[],"payload":{"tag":"li","lines":"193,195"}}],"payload":{"tag":"h3","lines":"190,191"}},{"content":"Content Available","children":[{"content":"Detailed information about Alation Data Catalog features","children":[],"payload":{"tag":"li","lines":"196,197"}},{"content":"Product and feature-specific information","children":[],"payload":{"tag":"li","lines":"197,198"}},{"content":"Installation, administration, configuration information","children":[],"payload":{"tag":"li","lines":"198,199"}},{"content":"Repository of release notes","children":[],"payload":{"tag":"li","lines":"199,200"}}],"payload":{"tag":"h3","lines":"195,196"}}],"payload":{"tag":"h2","lines":"188,189"}}],"payload":{"tag":"h1","lines":"0,1"}},null)</script>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script>
+
+<script>
+// Configuration des mindmaps
+const mindmaps = {
+  'alation-help': {
+    title: 'Alation Help Center',
+    data: {"content":"Alation Help Center Quick Start","children":[{"content":"Alation Help Center Overview","children":[{"content":"Overview of the Alation Help Center","children":[{"content":"Unified Entry Point","children":[{"content":"Serves as a unified entry point to various Alation information resources","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"Allows users to search across multiple platforms simultaneously","children":[],"payload":{"tag":"li","lines":"8,9"}},{"content":"Integrates content from different sources into a single search experience","children":[],"payload":{"tag":"li","lines":"9,11"}}],"payload":{"tag":"h4","lines":"6,7"}},{"content":"Initial Access","children":[{"content":"Alation Product Documentation","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"Alation Developer Portal","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"Alation University","children":[],"payload":{"tag":"li","lines":"14,16"}}],"payload":{"tag":"h4","lines":"11,12"}}],"payload":{"tag":"h3","lines":"4,5"}}],"payload":{"tag":"h2","lines":"2,3"}}],"payload":{"tag":"h1","lines":"0,1"}}
+  },
+  
+  // AJOUTEZ VOS NOUVELLES MINDMAPS ICI
+  'example-mindmap': {
+    title: 'Example Mindmap',
+    data: {"content":"Example Root","children":[{"content":"Branch 1","children":[{"content":"Sub-branch 1.1","children":[]},{"content":"Sub-branch 1.2","children":[]}]},{"content":"Branch 2","children":[{"content":"Sub-branch 2.1","children":[]}]}]}
+  },
+  
+  'another-example': {
+    title: 'Another Example',
+    data: {"content":"Another Root","children":[{"content":"Topic A","children":[]},{"content":"Topic B","children":[]}]}
+  }
+};
+
+// Variables globales
+let currentMarkmap = null;
+let currentToolbar = null;
+
+// Fonction pour charger une mindmap
+function loadMindmap(key) {
+  const config = mindmaps[key];
+  if (!config) return;
+  
+  // Mettre à jour l'URL sans recharger la page
+  const url = new URL(window.location);
+  url.searchParams.set('map', key);
+  window.history.pushState({}, '', url);
+  
+  // Nettoyer l'ancienne mindmap
+  document.getElementById('mindmap').innerHTML = '';
+  if (currentToolbar) {
+    const oldToolbar = document.querySelector('.mm-toolbar');
+    if (oldToolbar) oldToolbar.remove();
+  }
+  
+  // Créer la nouvelle mindmap
+  const { markmap } = window;
+  currentMarkmap = markmap.Markmap.create(
+    'svg#mindmap',
+    markmap.deriveOptions(),
+    config.data
+  );
+  
+  // Ajouter la toolbar
+  setTimeout(() => {
+    currentToolbar = new markmap.Toolbar();
+    currentToolbar.attach(currentMarkmap);
+    const toolbarEl = currentToolbar.render();
+    toolbarEl.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+    document.body.append(toolbarEl);
+  });
+  
+  // Mettre à jour le menu actif
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  document.querySelector(`[data-key="${key}"]`)?.classList.add('active');
+  
+  // Appliquer le thème sombre si nécessaire
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('markmap-dark');
+  }
+}
+
+// Générer le menu de navigation
+function generateNav() {
+  const navItems = document.getElementById('nav-items');
+  navItems.innerHTML = '';
+  
+  Object.keys(mindmaps).forEach(key => {
+    const div = document.createElement('div');
+    div.className = 'nav-item';
+    div.textContent = mindmaps[key].title;
+    div.setAttribute('data-key', key);
+    div.onclick = () => loadMindmap(key);
+    navItems.appendChild(div);
+  });
+}
+
+// Toggle menu mobile
+document.getElementById('menu-toggle').onclick = function() {
+  document.getElementById('nav-menu').classList.toggle('open');
+};
+
+// Initialisation
+window.addEventListener('DOMContentLoaded', () => {
+  generateNav();
+  
+  // Charger la mindmap depuis l'URL ou la première par défaut
+  const urlParams = new URLSearchParams(window.location.search);
+  const mapKey = urlParams.get('map') || Object.keys(mindmaps)[0];
+  loadMindmap(mapKey);
+});
+
+// Gérer le bouton retour du navigateur
+window.addEventListener('popstate', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mapKey = urlParams.get('map') || Object.keys(mindmaps)[0];
+  loadMindmap(mapKey);
+});
+</script>
+
 </body>
 </html>
