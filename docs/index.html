@@ -9880,6 +9880,2412 @@ html {
                 }
             }
   } , 
+
+   'Mastering Alation Analytics': {
+    title: 'Mastering Alation Analytics',
+    data: {
+                "content": "Mastering Alation Analytics",
+                "children": [{
+                    "content": "Introduction to the AAv2 Schema",
+                    "children": [],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "5,6"
+                    }
+                }, {
+                    "content": "Performing Analytics About Catalog Users",
+                    "children": [{
+                        "content": "First Query Tab - Basic Metrics",
+                        "children": [{
+                            "content": "Query 1: Get all metrics for specific date and datasource",
+                            "children": [{
+                                "content": "Description: Retrieve all aggregated QLI metrics",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "11,12"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT * FROM public.aggr_qli_metrics WHERE date(date) = &apos;2022-05-03&apos; AND ds_id = 1;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "12,14"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "10,11"
+                            }
+                        }, {
+                            "content": "Query 2: Aggregate queries and rows by datasource",
+                            "children": [{
+                                "content": "Description: Groups by ds_id and date, calculates totals",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "15,16"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT ds_id, date(date) AS date, sum(num_query) AS total_queries_run, sum(total_rows) AS total_rows_queried FROM public.aggr_qli_metrics WHERE date(date) = &apos;2022-05-03&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "16,18"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "14,15"
+                            }
+                        }, {
+                            "content": "Query 3: Join with datasource titles",
+                            "children": [{
+                                "content": "Description: Adds datasource title, shows metrics per datasource name",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "19,20"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, date(QM.date) AS date, sum(QM.num_query) AS total_queries_run, sum(QM.total_rows) AS total_rows_queried FROM public.aggr_qli_metrics AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id WHERE date(date) = &apos;2022-05-03&apos; GROUP BY 1,2,3;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "20,22"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "18,19"
+                            }
+                        }, {
+                            "content": "Query 4: Execution events analysis",
+                            "children": [{
+                                "content": "Description: Analyzes execution_event table for rows and query count",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "23,24"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT rd.title, ee.ds_id, date(ee.executed_at) AS date, sum(ee.result_row_count) AS total_rows_queried, count(*) AS total_queries_run FROM public.execution_event AS ee LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = ee.ds_id GROUP BY 1,2,3;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "24,26"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "22,23"
+                            }
+                        }, {
+                            "content": "Query 5: Compare QLI vs Compose queries",
+                            "children": [{
+                                "content": "Description: Uses CTE to compare QLI metrics with Compose execution events",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "27,28"
+                                }
+                            }, {
+                                "content": "SQL: <code>WITH compose_queries AS (SELECT rd.title, ee.ds_id, date(ee.executed_at) AS date, sum(ee.result_row_count) AS total_rows_queried, count(*) AS total_queries_run FROM public.execution_event AS ee LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = ee.ds_id GROUP BY 1,2,3) SELECT rd.title, qm.ds_id, date(qm.date) AS date, sum(qm.num_query) AS qli_total_queries_run, sum(qm.total_rows) AS qli_total_rows_queried, CQ.total_queries_run AS compose_total_queries_run, CQ.total_rows_queried AS compose_total_rows_queried FROM public.aggr_qli_metrics AS qm LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = qm.ds_id LEFT JOIN compose_queries AS CQ ON CQ.ds_id = QM.ds_id AND CQ.date = qm.date GROUP BY 1,2,3,6,7 ORDER BY date DESC;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "28,30"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "26,27"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "8,9"
+                        }
+                    }, {
+                        "content": "Second Query Tab - Mentions Analysis",
+                        "children": [{
+                            "content": "Query 1: Get all mentions for specific date",
+                            "children": [{
+                                "content": "Description: Retrieve all aggregated QLI mentions",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "33,34"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT * FROM public.aggr_qli_mentions WHERE date(date) = &apos;2022-05-03&apos; AND ds_id = 1;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "34,36"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "32,33"
+                            }
+                        }, {
+                            "content": "Query 2: Distinct vs total queries",
+                            "children": [{
+                                "content": "Description: Calculates distinct and total queries run",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "37,38"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT ds_id, sum(distinct_num_query) AS distinct_queries_run, sum(num_query) AS total_queries_run FROM public.aggr_qli_mentions WHERE date(date) = &apos;2022-05-03&apos; GROUP BY 1;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "38,40"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "36,37"
+                            }
+                        }, {
+                            "content": "Query 3: Queries by datasource title",
+                            "children": [{
+                                "content": "Description: Joins with rdbms_datasources, groups by datasource",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "41,42"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, sum(QM.distinct_num_query) AS distinct_queries_run, sum(QM.num_query) AS total_queries_run FROM public.aggr_qli_mentions AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id WHERE date(QM.date) = &apos;2022-05-03&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "42,44"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "40,41"
+                            }
+                        }, {
+                            "content": "Query 4: Unique schemas queried",
+                            "children": [{
+                                "content": "Description: Filters by schema object_type, counts distinct schemas",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "45,46"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, sum(QM.distinct_num_query) AS distinct_queries_run, sum(QM.num_query) AS total_queries_run, count(distinct(QM.object_id)) AS num_unique_schemas_queried FROM public.aggr_qli_mentions AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id WHERE date(QM.date) = &apos;2022-05-03&apos; AND QM.object_type = &apos;schema&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "46,48"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "44,45"
+                            }
+                        }, {
+                            "content": "Query 5: Schemas and tables queried",
+                            "children": [{
+                                "content": "Description: Self-join to count both schemas and tables",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "49,50"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, sum(QM.distinct_num_query) AS distinct_queries_run, sum(QM.num_query) AS total_queries_run, count(distinct(QM.object_id)) AS num_unique_schemas_queried, COUNT(DISTINCT(QM_TB.object_id)) AS num_unique_tables_queried FROM public.aggr_qli_mentions AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id JOIN public.aggr_qli_mentions AS QM_TB ON QM_TB.ds_id = QM.ds_id WHERE date(QM.date) = &apos;2022-05-03&apos; AND QM.object_type = &apos;schema&apos; AND QM_TB.object_type = &apos;table&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "50,52"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "48,49"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "30,31"
+                        }
+                    }, {
+                        "content": "Third Query Tab - Comprehensive Metrics",
+                        "children": [{
+                            "content": "Complete QLI metrics by datasource and day",
+                            "children": [{
+                                "content": "Description: Comprehensive analysis with compute time and object counts",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "55,56"
+                                }
+                            }, {
+                                "content": "Metrics: Total queries, Distinct queries, Total rows, Compute time, Avg compute per query, Unique schemas, Unique tables",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "56,57"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QME.ds_id, DATE(QME.date) AS date, SUM(QME.num_query) AS total_queries_run, SUM(QM_DS.distinct_num_query) AS distinct_queries_run, SUM(QME.total_rows) AS total_rows_queried, ROUND(SUM(QME.total_time_ms::numeric/1000.0),3) AS total_compute_time_in_seconds, ROUND(AVG((QME.total_time_ms::numeric/1000.0)/QME.num_query),3) AS avg_compute_per_query_in_seconds, COUNT(DISTINCT(QM_SC.object_id)) AS num_unique_schemas_queried, COUNT(DISTINCT(QM_TB.object_id)) AS num_unique_tables_queried FROM public.aggr_qli_metrics AS QME JOIN public.rdbms_datasources AS RD ON QME.ds_id = RD.ds_id JOIN public.aggr_qli_mentions AS QM_DS ON QME.ds_id = QM_DS.ds_id JOIN public.aggr_qli_mentions AS QM_SC ON QME.ds_id = QM_SC.ds_id JOIN public.aggr_qli_mentions AS QM_TB ON QME.ds_id = QM_TB.ds_id WHERE RD.title = &#x24;{ Datasource Title } AND DATE(QME.date) &gt;= &#x24;{ Start Date } AND DATE(QME.date) &lt;= &#x24;{ End Date } AND QM_SC.object_type = &apos;schema&apos; AND QM_TB.object_type = &apos;table&apos; GROUP BY 1, 2, 3 ORDER BY 3;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "57,58"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "54,55"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "52,53"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "6,7"
+                    }
+                }, {
+                    "content": "Performing Analytics About Catalog Users",
+                    "children": [],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "58,59"
+                    }
+                }, {
+                    "content": "Performing Analytics Based on Visits",
+                    "children": [],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "60,61"
+                    }
+                }, {
+                    "content": "Performing Analytics for Articles",
+                    "children": [{
+                        "content": "Get All Articles with Author Information",
+                        "children": [{
+                            "content": "Description: Retrieve all non-deleted articles with author details",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "66,67"
+                            }
+                        }, {
+                            "content": "Returns: title, agile_approval_enabled, private, author_id, last_edited_by_id, author_name, ts_created",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "67,68"
+                            }
+                        }, {
+                            "content": "Filter: deleted = False",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "68,69"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT A.title, A.agile_approval_enabled, A.private, A.user_id as author_id, A.last_edited_by_id, U.display_name as author_name, A.ts_created FROM article AS A LEFT JOIN users AS U ON A.user_id = U.user_id WHERE deleted = False;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "69,71"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "65,66"
+                        }
+                    }, {
+                        "content": "Articles with Tags",
+                        "children": [{
+                            "content": "Description: Retrieve articles and their associated tags",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "72,73"
+                            }
+                        }, {
+                            "content": "Returns: article_id, object_id, title, tag_name, ts_created, ts_updated, user_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "73,74"
+                            }
+                        }, {
+                            "content": "Filter: deleted = False AND object_type_id = 0 (article type)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "74,75"
+                            }
+                        }, {
+                            "content": "Order: By article_id ascending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "75,76"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT A.article_id, T.object_id, A.title, T.tag_name, A.ts_created, A.ts_updated, A.user_id FROM article AS A LEFT JOIN tags AS T ON T.object_id = A.article_id WHERE A.deleted = False AND T.object_type_id = 0 ORDER BY A.article_id ASC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "76,78"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "71,72"
+                        }
+                    }, {
+                        "content": "Article Visits and Unique Visitors",
+                        "children": [{
+                            "content": "Description: Analyze article popularity by visit count and unique visitors",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "79,80"
+                            }
+                        }, {
+                            "content": "Uses: CTE to aggregate visit statistics",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "80,81"
+                            }
+                        }, {
+                            "content": "Returns: title, article_id, visit_count, unique_visitors",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "81,82"
+                            }
+                        }, {
+                            "content": "Filter: deleted = False, object_type_id = 0",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "82,83"
+                            }
+                        }, {
+                            "content": "Order: By visit_count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "83,84"
+                            }
+                        }, {
+                            "content": "SQL: <code>WITH article_visits AS (SELECT object_id, count(*) as visit_count, count(distinct user_id) as unique_visitors FROM visits WHERE object_type_id = 0 GROUP BY object_id) SELECT title, article.article_id, visit_count, unique_visitors FROM article INNER JOIN article_visits ON article_visits.object_id = article.article_id WHERE deleted = False ORDER BY visit_count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "84,86"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "78,79"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "63,64"
+                    }
+                }, {
+                    "content": "Performing Analytics for Queries",
+                    "children": [{
+                        "content": "Query Writers Analysis",
+                        "children": [{
+                            "content": "Description: Analyze users who write queries with their activity metrics",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "90,91"
+                            }
+                        }, {
+                            "content": "Returns: user_id, display_name, queries_written, last_active",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "91,92"
+                            }
+                        }, {
+                            "content": "Metrics: Count of distinct queries per user, last update timestamp",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "92,93"
+                            }
+                        }, {
+                            "content": "Groups by: user_id, display_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "93,94"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT Q.user_id, U.display_name, COUNT(DISTINCT query_id) AS queries_written, MAX(ts_updated) AS last_active FROM query AS Q LEFT JOIN users AS U ON U.user_id = Q.user_id GROUP BY Q.user_id, U.display_name;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "94,96"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "89,90"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "86,87"
+                    }
+                }, {
+                    "content": "Performing Analytics for RDBMS Objects",
+                    "children": [{
+                        "content": "List of Stewards on Active Valid Objects",
+                        "children": [{
+                            "content": "Description: Retrieve all stewards assigned to non-deleted RDBMS objects (tables, columns, schemas, datasources)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "99,100"
+                            }
+                        }, {
+                            "content": "Returns: user_id, display_name, user_email, is_active",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "100,101"
+                            }
+                        }, {
+                            "content": "Process: Uses UNION to combine stewards from all RDBMS object types",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "101,102"
+                            }
+                        }, {
+                            "content": "Filter: ts_deleted IS NULL, steward IS NOT NULL, steward_type = &apos;user&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "102,103"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT user_id, display_name, user_email, is_active FROM (SELECT DISTINCT unnest(steward) AS steward FROM public.rdbms_tables WHERE ts_deleted IS NULL AND steward IS NOT NULL UNION SELECT DISTINCT unnest(steward) AS steward FROM public.rdbms_columns WHERE ts_deleted IS NULL AND steward IS NOT NULL UNION SELECT DISTINCT unnest(steward) AS steward FROM public.rdbms_schemas WHERE ts_deleted is NULL AND steward IS NOT NULL UNION SELECT DISTINCT unnest(steward) AS steward FROM public.rdbms_datasources WHERE ts_deleted IS NULL AND steward IS NOT NULL) steward_id_and_type LEFT JOIN users ON users.user_id = split_part(steward, &apos;_&apos;, 2)::int WHERE split_part(steward, &apos;_&apos;, 1) = &apos;user&apos;;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "103,105"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "98,99"
+                        }
+                    }, {
+                        "content": "Number of Visits Across Different RDBMS Objects",
+                        "children": [{
+                            "content": "Description: Comprehensive visit analysis across all RDBMS hierarchy levels (datasource, schema, table, column)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "106,107"
+                            }
+                        }, {
+                            "content": "Returns: ds_id, schema_id, table_id, column_id, ds_name, schema_name, table_name, column_name, ds_visits, schema_visits, table_visits, column_visits",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "107,108"
+                            }
+                        }, {
+                            "content": "Process: Multiple LEFT JOINs to aggregate visits at each hierarchy level",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "108,109"
+                            }
+                        }, {
+                            "content": "Filter: excluded = FALSE for columns and tables",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "109,110"
+                            }
+                        }, {
+                            "content": "Object Types: &apos;attribute&apos; (columns), &apos;table&apos;, &apos;schema&apos;, &apos;data&apos; (datasources)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "110,111"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT col.ds_id, col.schema_id, col.table_id, col.column_id, ds_name, schema_name, table_name, column_name, ds_visits, schema_visits, table_visits, column_visits FROM (SELECT C.ds_id, C.schema_id, C.table_id, C.column_id, COALESCE(name, title) AS column_name, count(distinct V.id) AS column_visits FROM visits AS V LEFT JOIN rdbms_columns AS C ON V.object_id = C.column_id WHERE V.object_type=&apos;attribute&apos; AND C.excluded is FALSE GROUP BY 1,2,3,4,5) col LEFT JOIN (SELECT T.table_id, COALESCE(name, title) AS table_name, count(distinct V.id) AS table_visits FROM visits AS V LEFT JOIN rdbms_tables AS T ON V.object_id = T.table_id WHERE V.object_type=&apos;table&apos; AND T.excluded is FALSE GROUP BY 1,2) tbl ON tbl.table_id = col.table_id LEFT JOIN (SELECT S.schema_id, COALESCE(name, title) AS schema_name, count(distinct V.id) AS schema_visits FROM visits AS V LEFT JOIN rdbms_schemas AS S ON V.object_id = S.schema_id WHERE V.object_type=&apos;schema&apos; GROUP BY 1,2) schema ON schema.schema_id = col.schema_id LEFT JOIN (SELECT D.ds_id, COALESCE(name, title) AS ds_name, count(distinct V.id) AS ds_visits FROM visits AS V LEFT JOIN rdbms_datasources AS D ON V.object_id = D.ds_id WHERE V.object_type=&apos;data&apos; group by 1,2) ds ON ds.ds_id = col.ds_id;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "111,113"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "105,106"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "96,97"
+                    }
+                }, {
+                    "content": "Performing Analytics for Catalog Sets",
+                    "children": [{
+                        "content": "Get All Conditional Catalog Set Members",
+                        "children": [{
+                            "content": "Description: Unnest catalog set ids from alation_set_member and retrieve based on is_manual_set=false",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "116,117"
+                            }
+                        }, {
+                            "content": "Purpose: Retrieve all objects that are members of conditional catalog sets",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "117,118"
+                            }
+                        }, {
+                            "content": "Key Filters: deleted=FALSE, is_manual_set=FALSE",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "118,119"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT object_uuid, object_id, object_type_id, object_type, catalog_set_ids FROM (SELECT object_uuid, object_id, object_type_id, object_type, unnest(catalog_set_ids) AS catalog_set_ids FROM public.alation_set_member) AS am JOIN public.catalog_set_membership AS cm ON am.catalog_set_ids = cm.catalog_set_property_id WHERE cm.deleted = FALSE AND cm.is_manual_set = FALSE;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "119,121"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "115,116"
+                        }
+                    }, {
+                        "content": "List Stewards Assigned to Objects by Catalog Sets",
+                        "children": [{
+                            "content": "Description: Retrieve steward assignments made through catalog sets",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "122,123"
+                            }
+                        }, {
+                            "content": "Process: Uses CTE to extract steward information and join with stewards table",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "123,124"
+                            }
+                        }, {
+                            "content": "Returns: object_id, object_type, username, email, catalog_set_ids, steward_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "124,125"
+                            }
+                        }, {
+                            "content": "SQL: <code>WITH catalog_set_steward_info AS (SELECT DISTINCT object_id, object_type, split_part(unnest(cm.steward), &apos;_&apos;, 1)::text AS steward_type, split_part(unnest(cm.steward), &apos;_&apos;, 2) AS steward_id, catalog_set_ids FROM (SELECT DISTINCT object_uuid, object_id, object_type, object_type_id, unnest(catalog_set_ids) AS catalog_set_ids FROM public.alation_set_member) AS tmp JOIN public.catalog_set_membership AS cm ON tmp.catalog_set_ids = cm.catalog_set_property_id WHERE cm.deleted = FALSE AND cm.steward IS NOT NULL) SELECT DISTINCT object_id, object_type, username, email, catalog_set_ids, catalog_set_steward_info.steward_id FROM catalog_set_steward_info LEFT JOIN public.stewards AS stwds ON catalog_set_steward_info.steward_type = stwds.steward_type WHERE catalog_set_steward_info.steward_id = stwds.steward_id::text;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "125,127"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "121,122"
+                        }
+                    }, {
+                        "content": "List Tables Flagged by Catalog Sets",
+                        "children": [{
+                            "content": "Description: Filter flags set by catalog sets on table objects",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "128,129"
+                            }
+                        }, {
+                            "content": "Join Strategy: flags + catalog_set_membership on object_id with object_type_id=47",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "129,130"
+                            }
+                        }, {
+                            "content": "Key Filters: object_type_id=47, members_object_type=&apos;table&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "130,131"
+                            }
+                        }, {
+                            "content": "Returns: object_id, datasource_name, schema_name, table_name, flag_type, value, catalog_set_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "131,132"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT am.object_id, rd.title AS datasource_name, rs.name AS schema_name, rt.name AS table_name, fgs.flag_type, fgs.value, am.catalog_set_id FROM public.flags AS fgs JOIN public.catalog_set_membership AS cm ON cm.catalog_set_property_id = fgs.object_id JOIN (SELECT object_id, object_type, object_type_id, unnest(catalog_set_ids) AS catalog_set_id FROM public.alation_set_member) AS am ON cm.catalog_set_property_id = am.catalog_set_id LEFT JOIN public.rdbms_tables AS rt ON rt.table_id = am.object_id LEFT JOIN public.rdbms_schemas AS rs ON rs.schema_id = rt.schema_id LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = rt.ds_id WHERE fgs.object_type_id = 47 AND cm.members_object_type = &apos;table&apos;;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "132,134"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "127,128"
+                        }
+                    }, {
+                        "content": "List Tables Tagged by Catalog Sets",
+                        "children": [{
+                            "content": "Description: Retrieve tags applied to tables through catalog sets",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "135,136"
+                            }
+                        }, {
+                            "content": "Join Strategy: tags + catalog_set_membership with object_type_id=47",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "136,137"
+                            }
+                        }, {
+                            "content": "Key Filters: object_type_id=47, members_object_type=&apos;table&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "137,138"
+                            }
+                        }, {
+                            "content": "Returns: object_id, datasource_name, schema_name, table_name, tag_name, description, tag_url, catalog_set_property_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "138,139"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT am.object_id, rd.title AS datasource_name, rs.name AS schema_name, rt.name AS table_name, tgs.tag_name, tgs.description, tgs.tag_url, cm.catalog_set_property_id FROM public.tags AS tgs JOIN public.catalog_set_membership cm ON cm.catalog_set_property_id = tgs.object_id JOIN (SELECT object_id, object_type, object_type_id, unnest(catalog_set_ids) AS catalog_set_id FROM public.alation_set_member) AS am ON cm.catalog_set_property_id = am.catalog_set_id LEFT JOIN public.rdbms_tables AS rt ON rt.table_id = am.object_id LEFT JOIN public.rdbms_schemas AS rs ON rs.schema_id = rt.schema_id LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = rt.ds_id WHERE tgs.object_type_id = 47 AND cm.members_object_type = &apos;table&apos;;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "139,141"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "134,135"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "113,114"
+                    }
+                }, {
+                    "content": "Performing Analytics for BI Objects",
+                    "children": [{
+                        "content": "Get All BI Servers",
+                        "children": [{
+                            "content": "Description: Retrieve all BI server information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "145,146"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT * FROM bi_server;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "146,148"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "144,145"
+                        }
+                    }, {
+                        "content": "Get BI Servers with Folders",
+                        "children": [{
+                            "content": "Description: Join BI servers with their folders",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "149,150"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT * FROM bi_server AS S LEFT JOIN bi_folder AS F ON F.bi_server_id = S.bi_server_id;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "150,152"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "148,149"
+                        }
+                    }, {
+                        "content": "Get BI Reports by Server",
+                        "children": [{
+                            "content": "Description: Retrieve all reports for a specific BI server",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "153,154"
+                            }
+                        }, {
+                            "content": "Returns: bi_report_id, report_name, report_external_id, report_type, bi_object_type, num_accesses, owner, popularity",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "154,155"
+                            }
+                        }, {
+                            "content": "Filter: bi_server_id = 1",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "155,156"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT R.bi_report_id, R.name AS report_name, R.external_id AS report_external_id, R.report_type, R.bi_object_type, R.num_accesses, R.owner, R.popularity FROM bi_server AS S LEFT JOIN bi_report AS R ON R.bi_server_id = S.bi_server_id WHERE S.bi_server_id = 1;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "156,158"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "152,153"
+                        }
+                    }, {
+                        "content": "Get Reports by Folder",
+                        "children": [{
+                            "content": "Description: Retrieve reports organized by folders",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "159,160"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, bi_folder_id, folder_external_id, folder_name, bi_report_id, report_name, report_external_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "160,161"
+                            }
+                        }, {
+                            "content": "Filter: Only folders containing reports",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "161,162"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT F.bi_server_id, F.bi_folder_id, F.external_id AS folder_external_id, F.name AS folder_name, R.bi_report_id, R.name AS report_name, R.external_id AS report_external_id FROM bi_folder AS F LEFT JOIN bi_report AS R ON R.parent_bi_folder_fp = F.fp WHERE R.bi_report_id IS NOT NULL;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "162,164"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "158,159"
+                        }
+                    }, {
+                        "content": "Get Report Columns",
+                        "children": [{
+                            "content": "Description: Retrieve columns for BI reports",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "165,166"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, bi_report_id, report_name, report_external_id, bi_report_column_id, report_column_name, report_column_external_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "166,167"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT R.bi_server_id, R.bi_report_id, R.name AS report_name, R.external_id AS report_external_id, C.bi_report_column_id, C.name AS report_column_name, C.external_id AS report_column_external_id FROM bi_report AS R LEFT JOIN bi_report_column AS C ON C.bi_report_fp = R.fp;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "167,169"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "164,165"
+                        }
+                    }, {
+                        "content": "Get BI Datasources by Server",
+                        "children": [{
+                            "content": "Description: Retrieve all datasources for a specific BI server",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "170,171"
+                            }
+                        }, {
+                            "content": "Returns: datasource_external_id, bi_ds_id, datasource_name, bi_object_type",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "171,172"
+                            }
+                        }, {
+                            "content": "Filter: bi_server_id = 1",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "172,173"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT D.external_id AS datasource_external_id, D.bi_ds_id, D.name AS datasource_name, D.bi_object_type FROM bi_server AS S LEFT JOIN public.bi_datasources AS D ON D.bi_server_id = S.bi_server_id WHERE S.bi_server_id = 1;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "173,175"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "169,170"
+                        }
+                    }, {
+                        "content": "Get Datasources by Folder",
+                        "children": [{
+                            "content": "Description: Retrieve datasources organized by folders",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "176,177"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, bi_folder_id, folder_external_id, folder_name, datasource_external_id, bi_ds_id, datasource_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "177,178"
+                            }
+                        }, {
+                            "content": "Filter: Only folders containing datasources",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "178,179"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT F.bi_server_id, F.bi_folder_id, F.external_id AS folder_external_id, F.name AS folder_name, D.external_id AS datasource_external_id, D.bi_ds_id, D.name AS datasource_name FROM bi_folder AS F LEFT JOIN bi_datasources AS D ON D.parent_bi_folder_fp = F.fp WHERE D.bi_ds_id IS NOT NULL;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "179,181"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "175,176"
+                        }
+                    }, {
+                        "content": "Get Datasource Columns",
+                        "children": [{
+                            "content": "Description: Retrieve columns for BI datasources",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "182,183"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, datasource_external_id, bi_ds_id, datasource_name, column_external_id, bi_ds_column_id, column_name, data_type",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "183,184"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT D.bi_server_id, D.external_id AS datasource_external_id, D.bi_ds_id, D.name AS datasource_name, C.external_id AS column_external_id, C.bi_ds_column_id, C.name AS column_name, C.data_type FROM bi_datasources AS D LEFT JOIN bi_datasource_columns AS C ON C.bi_ds_fp = D.fp;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "184,186"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "181,182"
+                        }
+                    }, {
+                        "content": "Get BI Connections by Server",
+                        "children": [{
+                            "content": "Description: Retrieve all connections for a specific BI server",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "187,188"
+                            }
+                        }, {
+                            "content": "Returns: connection_external_id, bi_connection_id, connection_name, bi_object_type",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "188,189"
+                            }
+                        }, {
+                            "content": "Filter: bi_server_id = 1",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "189,190"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT C.external_id AS connection_external_id, C.bi_connection_id, C.name AS connection_name, C.bi_object_type FROM bi_server AS S LEFT JOIN public.bi_connection AS C ON C.bi_server_id = S.bi_server_id WHERE S.bi_server_id = 1;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "190,192"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "186,187"
+                        }
+                    }, {
+                        "content": "Get Connections by Folder",
+                        "children": [{
+                            "content": "Description: Retrieve connections organized by folders",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "193,194"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, bi_folder_id, folder_external_id, folder_name, connection_external_id, bi_connection_id, connection_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "194,195"
+                            }
+                        }, {
+                            "content": "Filter: Only folders containing connections",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "195,196"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT F.bi_server_id, F.bi_folder_id, F.external_id AS folder_external_id, F.name AS folder_name, C.external_id AS connection_external_id, C.bi_connection_id, C.name AS connection_name FROM bi_folder AS F LEFT JOIN bi_connection AS C ON C.parent_folder_fp = F.fp WHERE C.bi_connection_id IS NOT NULL;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "196,198"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "192,193"
+                        }
+                    }, {
+                        "content": "Get Connection Columns",
+                        "children": [{
+                            "content": "Description: Retrieve columns for BI connections",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "199,200"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, connection_external_id, bi_connection_id, connection_name, column_external_id, bi_connection_column_id, column_name, data_type",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "200,201"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT C.bi_server_id, C.external_id AS connection_external_id, C.bi_connection_id, C.name AS connection_name, CC.external_id AS column_external_id, CC.bi_connection_column_id, CC.name AS column_name, CC.data_type FROM public.bi_connection AS C LEFT JOIN public.bi_connection_column AS CC ON CC.connection_fp = C.fp;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "201,203"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "198,199"
+                        }
+                    }, {
+                        "content": "Get Objects in Extraction List",
+                        "children": [{
+                            "content": "Description: Retrieve folders and reports that are in the extraction list",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "204,205"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, bi_folder_id, bi_report_id, folder_name, report_name, folder_external_id, report_external_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "205,206"
+                            }
+                        }, {
+                            "content": "Filter: in_extraction_list = true",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "206,207"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT S.bi_server_id, F.bi_folder_id, R.bi_report_id, F.name AS folder_name, R.name AS report_name, F.external_id AS folder_external_id, R.external_id AS report_external_id FROM bi_server AS S LEFT JOIN bi_folder AS F ON F.bi_server_id = S.bi_server_id LEFT JOIN bi_report AS R ON R.bi_server_id = S.bi_server_id WHERE F.in_extraction_list IS true ORDER BY 1,2;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "207,209"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "203,204"
+                        }
+                    }, {
+                        "content": "Get Extractable Objects",
+                        "children": [{
+                            "content": "Description: Retrieve folders and reports that are extractable",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "210,211"
+                            }
+                        }, {
+                            "content": "Returns: bi_server_id, bi_folder_id, bi_report_id, folder_name, report_name, folder_external_id, report_external_id",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "211,212"
+                            }
+                        }, {
+                            "content": "Filter: is_extractable = true",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "212,213"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT S.bi_server_id, F.bi_folder_id, R.bi_report_id, F.name AS folder_name, R.name AS report_name, F.external_id AS folder_external_id, R.external_id AS report_external_id FROM bi_server AS S LEFT JOIN bi_folder AS F ON F.bi_server_id = S.bi_server_id LEFT JOIN bi_report AS R ON R.bi_server_id = S.bi_server_id WHERE F.is_extractable IS true ORDER BY 1,2;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "213,215"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "209,210"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "141,142"
+                    }
+                }, {
+                    "content": "Performing File System Datasource Analytics",
+                    "children": [{
+                        "content": "Get All File Systems",
+                        "children": [{
+                            "content": "Description: Retrieve all file system information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "219,220"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT * FROM public.filesystems;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "220,222"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "218,219"
+                        }
+                    }, {
+                        "content": "Get File Systems with Directories",
+                        "children": [{
+                            "content": "Description: Join file systems with their directories",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "223,224"
+                            }
+                        }, {
+                            "content": "Returns: filesystem_id, filesystem_type, title, directory_id, directory_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "224,225"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT fs.filesystem_id, fs.filesystem_type, fs.title, d.directory_id, d.directory_name FROM public.filesystems AS fs LEFT JOIN public.directories AS d ON d.filesystem_id = fs.filesystem_id;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "225,227"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "222,223"
+                        }
+                    }, {
+                        "content": "Get File Systems with Directories and Files",
+                        "children": [{
+                            "content": "Description: Complete hierarchy of file systems, directories, and files",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "228,229"
+                            }
+                        }, {
+                            "content": "Returns: filesystem_id, filesystem_type, title, directory_id, directory_name, file_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "229,230"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT fs.filesystem_id, fs.filesystem_type, fs.title, d.directory_id, d.directory_name, f.file_name FROM public.filesystems AS fs LEFT JOIN public.directories AS d ON d.filesystem_id = fs.filesystem_id LEFT JOIN public.files AS f ON f.directory_id = d.directory_id;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "230,232"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "227,228"
+                        }
+                    }, {
+                        "content": "Number of Files in Each Directory",
+                        "children": [{
+                            "content": "Description: Count files per directory with file system information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "233,234"
+                            }
+                        }, {
+                            "content": "Returns: directory_name, file_count, filesystem_id, filesystem_type, title",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "234,235"
+                            }
+                        }, {
+                            "content": "Groups by: directory_name, filesystem_id, filesystem_type, title",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "235,236"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT d.directory_name, COUNT(f.file_name), fs.filesystem_id, fs.filesystem_type, fs.title FROM public.filesystems AS fs LEFT JOIN public.directories AS d ON d.filesystem_id = fs.filesystem_id LEFT JOIN public.files AS f ON f.directory_id = d.directory_id GROUP BY 1,3,4,5;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "236,238"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "232,233"
+                        }
+                    }, {
+                        "content": "File System Popularity by Visits",
+                        "children": [{
+                            "content": "Description: Analyze visit counts for file systems, directories, and files",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "239,240"
+                            }
+                        }, {
+                            "content": "Returns: title, directory_name, file_name, visit_count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "240,241"
+                            }
+                        }, {
+                            "content": "Filter: object_type IN (&apos;filesystem&apos;, &apos;file&apos;, &apos;directory&apos;)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "241,242"
+                            }
+                        }, {
+                            "content": "Order: By visit count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "242,243"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT fs.title, d.directory_name, f.file_name, COUNT(*) FROM visits AS v LEFT JOIN public.filesystems AS fs ON fs.filesystem_id = v.object_id LEFT JOIN public.directories AS d ON d.directory_id = v.object_uuid LEFT JOIN public.files AS f ON f.file_id = v.object_uuid WHERE object_type IN (&apos;filesystem&apos;, &apos;file&apos;, &apos;directory&apos;) AND (fs.filesystem_id IS NOT NULL OR d.directory_id IS NOT NULL OR f.file_id IS NOT NULL) GROUP BY 1,2,3 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "243,245"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "238,239"
+                        }
+                    }, {
+                        "content": "Tagged File System Objects",
+                        "children": [{
+                            "content": "Description: Retrieve tags applied to file systems, directories, and files",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "246,247"
+                            }
+                        }, {
+                            "content": "Returns: tag_name, title, directory_name, file_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "247,248"
+                            }
+                        }, {
+                            "content": "Filter: object_type IN (&apos;filesystem&apos;, &apos;file&apos;, &apos;directory&apos;)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "248,249"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT t.tag_name, fs.title, d.directory_name, f.file_name FROM public.tags AS t LEFT JOIN public.filesystems AS fs ON fs.filesystem_id = t.object_id LEFT JOIN public.directories AS d ON d.directory_id = t.object_uuid LEFT JOIN public.files AS f ON f.file_id = t.object_uuid WHERE object_type IN (&apos;filesystem&apos;, &apos;file&apos;, &apos;directory&apos;);</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "249,251"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "245,246"
+                        }
+                    }, {
+                        "content": "File System Directory Hierarchy",
+                        "children": [{
+                            "content": "Description: Recursive query to build complete directory hierarchy with path",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "252,253"
+                            }
+                        }, {
+                            "content": "Uses: Recursive CTE to traverse parent-child relationships",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "253,254"
+                            }
+                        }, {
+                            "content": "Returns: file_system, directory_id, level, category, full_directory_path",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "254,255"
+                            }
+                        }, {
+                            "content": "Features: Shows hierarchical level and full path from root to leaf",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "255,256"
+                            }
+                        }, {
+                            "content": "SQL: <code>WITH RECURSIVE pops (filesystem_id, directory_id, level, name, name_path) AS (SELECT filesystem_id, directory_id, 0, directory_name, ARRAY[directory_name] FROM directories WHERE parent_id is null UNION ALL SELECT p.filesystem_id, p.directory_id, t0.level + 1, p.directory_name, ARRAY_APPEND(t0.name_path, p.directory_name) FROM directories AS p INNER JOIN pops AS t0 ON t0.directory_id = p.parent_id) SELECT fs.title AS file_system, directory_id, level, name_path[1] AS category, ARRAY_TO_STRING(name_path, &apos; &gt; &apos;) AS full_directory_path FROM pops AS p LEFT JOIN public.filesystems AS fs ON fs.filesystem_id = p.filesystem_id;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "256,258"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "251,252"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "215,216"
+                    }
+                }, {
+                    "content": "Performing Search Analytics",
+                    "children": [{
+                        "content": "Get All Search Queries",
+                        "children": [{
+                            "content": "Description: Retrieve all search query information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "261,262"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT * FROM search_queries;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "262,264"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "260,261"
+                        }
+                    }, {
+                        "content": "Search Queries by Source",
+                        "children": [{
+                            "content": "Description: Count search queries grouped by source",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "265,266"
+                            }
+                        }, {
+                            "content": "Returns: source, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "266,267"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "267,268"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(source), COUNT(*) FROM search_queries GROUP BY 1 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "268,270"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "264,265"
+                        }
+                    }, {
+                        "content": "Search Queries by User ID",
+                        "children": [{
+                            "content": "Description: Count search queries per user",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "271,272"
+                            }
+                        }, {
+                            "content": "Returns: user_id, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "272,273"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "273,274"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(user_id), COUNT(*) FROM search_queries GROUP BY 1 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "274,276"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "270,271"
+                        }
+                    }, {
+                        "content": "Search Queries by User with Display Name",
+                        "children": [{
+                            "content": "Description: Count search queries per user with user display name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "277,278"
+                            }
+                        }, {
+                            "content": "Returns: user_id, display_name, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "278,279"
+                            }
+                        }, {
+                            "content": "Join: search_queries with users table",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "279,280"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "280,281"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(sq.user_id), u.display_name, COUNT(*) FROM search_queries AS sq LEFT JOIN users AS u ON u.user_id = sq.user_id GROUP BY 1,2 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "281,283"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "276,277"
+                        }
+                    }, {
+                        "content": "Search Query Strings by User",
+                        "children": [{
+                            "content": "Description: Analyze specific search terms used by users",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "284,285"
+                            }
+                        }, {
+                            "content": "Returns: query_string, display_name, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "285,286"
+                            }
+                        }, {
+                            "content": "Filter: query_string IS NOT NULL",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "286,287"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "287,288"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(sq.query_string), u.display_name, COUNT(*) FROM search_queries AS sq LEFT JOIN users AS u ON u.user_id = sq.user_id WHERE sq.query_string IS NOT NULL GROUP BY 1,2 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "288,290"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "283,284"
+                        }
+                    }, {
+                        "content": "Get All Search Clicks",
+                        "children": [{
+                            "content": "Description: Retrieve all search click information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "291,292"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT * FROM search_clicks;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "292,294"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "290,291"
+                        }
+                    }, {
+                        "content": "Search Clicks by User",
+                        "children": [{
+                            "content": "Description: Count search clicks per user",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "295,296"
+                            }
+                        }, {
+                            "content": "Returns: user_id, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "296,297"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "297,298"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(user_id), COUNT(*) FROM search_clicks GROUP BY 1 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "298,300"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "294,295"
+                        }
+                    }, {
+                        "content": "User Object Clicks from Search",
+                        "children": [{
+                            "content": "Description: Analyze clicks on user objects from search results",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "301,302"
+                            }
+                        }, {
+                            "content": "Returns: object_type, object_id, object_name, source, number_of_clicks",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "302,303"
+                            }
+                        }, {
+                            "content": "Filter: object_type = &apos;user&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "303,304"
+                            }
+                        }, {
+                            "content": "Order: By number_of_clicks descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "304,305"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(sc.object_type), sc.object_id, display_name AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN users AS u ON u.user_id = sc.object_id WHERE sc.object_type = &apos;user&apos; GROUP BY 1,2,3,4 ORDER BY number_of_clicks DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "305,307"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "300,301"
+                        }
+                    }, {
+                        "content": "Most Mentioned Data Objects",
+                        "children": [{
+                            "content": "Description: Comprehensive analysis of all object types mentioned in searches",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "308,309"
+                            }
+                        }, {
+                            "content": "Uses: UNION to combine multiple object types",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "309,310"
+                            }
+                        }, {
+                            "content": "Object Types: user, data, schema, table, attribute, article, query",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "310,311"
+                            }
+                        }, {
+                            "content": "Returns: object_type, object_id, object_name, source, number_of_clicks",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "311,312"
+                            }
+                        }, {
+                            "content": "Filter: source = &apos;mention_search&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "312,313"
+                            }
+                        }, {
+                            "content": "Order: By number_of_clicks descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "313,314"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT DISTINCT(sc.object_type), sc.object_id, u.display_name AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN users AS u ON u.user_id = sc.object_id WHERE sc.object_type = &apos;user&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 UNION SELECT DISTINCT(sc.object_type), sc.object_id, d.title AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN public.rdbms_datasources AS d ON d.ds_id = sc.object_id WHERE sc.object_type = &apos;data&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 UNION SELECT DISTINCT(sc.object_type), sc.object_id, s.name AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN public.rdbms_schemas AS s ON s.schema_id = sc.object_id WHERE sc.object_type = &apos;schema&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 UNION SELECT DISTINCT(sc.object_type), sc.object_id, t.name AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN public.rdbms_tables AS t ON t.table_id = sc.object_id WHERE sc.object_type = &apos;table&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 UNION SELECT DISTINCT(sc.object_type), sc.object_id, c.name AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN public.rdbms_columns AS c ON c.column_id = sc.object_id WHERE sc.object_type = &apos;attribute&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 UNION SELECT DISTINCT(sc.object_type), sc.object_id, a.title AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN article AS a ON a.article_id = sc.object_id WHERE sc.object_type = &apos;article&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 UNION SELECT DISTINCT(sc.object_type), sc.object_id, q.title AS object_name, sc.source, COUNT(*) AS number_of_clicks FROM search_clicks AS sc LEFT JOIN query AS q ON q.query_id = sc.object_id WHERE sc.object_type = &apos;query&apos; AND sc.source = &apos;mention_search&apos; GROUP BY 1,2,3,4 ORDER BY number_of_clicks DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "314,317"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "307,308"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "258,259"
+                    }
+                }, {
+                    "content": "Performing Analytics on Data Object History",
+                    "children": [{
+                        "content": "Get All Curation History",
+                        "children": [{
+                            "content": "Description: Retrieve all curation history records",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "320,321"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT * FROM public.curation_history;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "321,323"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "319,320"
+                        }
+                    }, {
+                        "content": "Curation Actions Summary",
+                        "children": [{
+                            "content": "Description: Count all curation actions grouped by action type",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "324,325"
+                            }
+                        }, {
+                            "content": "Returns: action, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "325,326"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "326,327"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT action, count(*) FROM public.curation_history GROUP BY 1 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "327,329"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "323,324"
+                        }
+                    }, {
+                        "content": "Curation Actions for RDBMS Objects",
+                        "children": [{
+                            "content": "Description: Count curation actions for database objects only",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "330,331"
+                            }
+                        }, {
+                            "content": "Returns: action, count",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "331,332"
+                            }
+                        }, {
+                            "content": "Filter: object_type IN (&apos;data&apos;, &apos;schema&apos;, &apos;table&apos;, &apos;attribute&apos;)",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "332,333"
+                            }
+                        }, {
+                            "content": "Order: By count descending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "333,334"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT action, count(*) FROM public.curation_history WHERE object_type IN (&apos;data&apos;, &apos;schema&apos;, &apos;table&apos;, &apos;attribute&apos;) GROUP BY 1 ORDER BY count DESC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "334,336"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "329,330"
+                        }
+                    }, {
+                        "content": "Article Curation History",
+                        "children": [{
+                            "content": "Description: Track all changes made to articles with user information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "337,338"
+                            }
+                        }, {
+                            "content": "Returns: article_title, article_updated, display_name, field_name, article_url, action, value",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "338,339"
+                            }
+                        }, {
+                            "content": "Filter: object_type = &apos;article&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "339,340"
+                            }
+                        }, {
+                            "content": "Order: By object_id ascending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "340,341"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT a.title AS article_title, date(ch.ts_updated) AS article_updated, u.display_name, ch.field_name, a.article_url, ch.action, ch.value FROM public.curation_history ch LEFT JOIN public.article a ON a.article_id = ch.object_id LEFT JOIN public.users u ON ch.user_id = u.user_id WHERE ch.object_type = &apos;article&apos; ORDER BY ch.object_id ASC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "341,343"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "336,337"
+                        }
+                    }, {
+                        "content": "Query Curation History",
+                        "children": [{
+                            "content": "Description: Track all changes made to queries with user information",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "344,345"
+                            }
+                        }, {
+                            "content": "Returns: object_id, query_updated, display_name, query_title, action, value",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "345,346"
+                            }
+                        }, {
+                            "content": "Filter: object_type = &apos;query&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "346,347"
+                            }
+                        }, {
+                            "content": "Order: By value ascending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "347,348"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT ch.object_id, date(ch.ts_updated) AS query_updated, u.display_name, q.title AS query_title, ch.action, ch.value FROM public.curation_history ch LEFT JOIN public.query q ON ch.object_id = q.query_id LEFT JOIN public.users u ON ch.user_id = u.user_id WHERE object_type = &apos;query&apos; ORDER BY ch.value ASC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "348,350"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "343,344"
+                        }
+                    }, {
+                        "content": "Custom Field Additions",
+                        "children": [{
+                            "content": "Description: Track when custom fields are added to objects",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "351,352"
+                            }
+                        }, {
+                            "content": "Returns: object_id, object_type, added_date, display_name, field_name",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "352,353"
+                            }
+                        }, {
+                            "content": "Filter: action = &apos;custom_field_value.add&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "353,354"
+                            }
+                        }, {
+                            "content": "Order: By object_type ascending",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "354,355"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT ch.object_id, ch.object_type, date(ch.ts_updated) AS added_date, u.display_name, ch.field_name FROM public.curation_history ch LEFT JOIN public.users u ON ch.user_id = u.user_id WHERE ch.action = &apos;custom_field_value.add&apos; ORDER BY ch.object_type ASC;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "355,357"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "350,351"
+                        }
+                    }, {
+                        "content": "Description Field Changes",
+                        "children": [{
+                            "content": "Description: Track changes to description custom fields",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "358,359"
+                            }
+                        }, {
+                            "content": "Returns: object_id, object_type, change_date, display_name, field_name, value",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "359,360"
+                            }
+                        }, {
+                            "content": "Filter: action = &apos;custom_field_value.replace&apos; AND field_name = &apos;Description&apos;",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "360,361"
+                            }
+                        }, {
+                            "content": "SQL: <code>SELECT ch.object_id, ch.object_type, date(ch.ts_updated) AS change_date, u.display_name, ch.field_name, ch.value FROM public.curation_history ch LEFT JOIN public.users u ON ch.user_id = u.user_id WHERE ch.action = &apos;custom_field_value.replace&apos; AND ch.field_name = &apos;Description&apos;;</code>",
+                            "children": [],
+                            "payload": {
+                                "tag": "li",
+                                "lines": "361,364"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "357,358"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "317,318"
+                    }
+                }, {
+                    "content": "Performing Analytics on Aggregated QLI Data",
+                    "children": [{
+                        "content": "First Query Tab - Basic QLI Metrics",
+                        "children": [{
+                            "content": "Get QLI Metrics for Specific Date and Datasource",
+                            "children": [{
+                                "content": "Description: Retrieve all aggregated QLI metrics for a specific date and datasource",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "369,370"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos; AND ds_id = 1",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "370,371"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT * FROM public.aggr_qli_metrics WHERE date(date) = &apos;2022-05-03&apos; AND ds_id = 1;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "371,373"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "368,369"
+                            }
+                        }, {
+                            "content": "Aggregate Queries and Rows by Datasource",
+                            "children": [{
+                                "content": "Description: Sum total queries and rows queried by datasource for a specific date",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "374,375"
+                                }
+                            }, {
+                                "content": "Returns: ds_id, date, total_queries_run, total_rows_queried",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "375,376"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "376,377"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT ds_id, date(date) AS date, sum(num_query) AS total_queries_run, sum(total_rows) AS total_rows_queried FROM public.aggr_qli_metrics WHERE date(date) = &apos;2022-05-03&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "377,379"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "373,374"
+                            }
+                        }, {
+                            "content": "QLI Metrics with Datasource Titles",
+                            "children": [{
+                                "content": "Description: Join with datasource titles to show readable datasource names",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "380,381"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, date, total_queries_run, total_rows_queried",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "381,382"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "382,383"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, date(QM.date) AS date, sum(QM.num_query) AS total_queries_run, sum(QM.total_rows) AS total_rows_queried FROM public.aggr_qli_metrics AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id WHERE date(date) = &apos;2022-05-03&apos; GROUP BY 1,2,3;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "383,385"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "379,380"
+                            }
+                        }, {
+                            "content": "Execution Events Analysis",
+                            "children": [{
+                                "content": "Description: Analyze execution events from Compose queries",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "386,387"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, date, total_rows_queried, total_queries_run",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "387,388"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT rd.title, ee.ds_id, date(ee.executed_at) AS date, sum(ee.result_row_count) AS total_rows_queried, count(*) AS total_queries_run FROM public.execution_event AS ee LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = ee.ds_id GROUP BY 1,2,3;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "388,390"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "385,386"
+                            }
+                        }, {
+                            "content": "Compare QLI vs Compose Queries",
+                            "children": [{
+                                "content": "Description: Compare QLI metrics with Compose execution events using CTE",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "391,392"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, date, qli_total_queries_run, qli_total_rows_queried, compose_total_queries_run, compose_total_rows_queried",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "392,393"
+                                }
+                            }, {
+                                "content": "Order: By date descending",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "393,394"
+                                }
+                            }, {
+                                "content": "SQL: <code>WITH compose_queries AS (SELECT rd.title, ee.ds_id, date(ee.executed_at) AS date, sum(ee.result_row_count) AS total_rows_queried, count(*) AS total_queries_run FROM public.execution_event AS ee LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = ee.ds_id GROUP BY 1,2,3) SELECT rd.title, qm.ds_id, date(qm.date) AS date, sum(qm.num_query) AS qli_total_queries_run, sum(qm.total_rows) AS qli_total_rows_queried, CQ.total_queries_run AS compose_total_queries_run, CQ.total_rows_queried AS compose_total_rows_queried FROM public.aggr_qli_metrics AS qm LEFT JOIN public.rdbms_datasources AS rd ON rd.ds_id = qm.ds_id LEFT JOIN compose_queries AS CQ ON CQ.ds_id = QM.ds_id AND CQ.date = qm.date GROUP BY 1,2,3,6,7 ORDER BY date DESC;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "394,396"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "390,391"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "366,367"
+                        }
+                    }, {
+                        "content": "Second Query Tab - QLI Mentions Analysis",
+                        "children": [{
+                            "content": "Get QLI Mentions for Specific Date and Datasource",
+                            "children": [{
+                                "content": "Description: Retrieve all aggregated QLI mentions for a specific date and datasource",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "399,400"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos; AND ds_id = 1",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "400,401"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT * FROM public.aggr_qli_mentions WHERE date(date) = &apos;2022-05-03&apos; AND ds_id = 1;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "401,403"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "398,399"
+                            }
+                        }, {
+                            "content": "Distinct vs Total Queries by Datasource",
+                            "children": [{
+                                "content": "Description: Compare distinct and total query counts by datasource",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "404,405"
+                                }
+                            }, {
+                                "content": "Returns: ds_id, distinct_queries_run, total_queries_run",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "405,406"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "406,407"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT ds_id, sum(distinct_num_query) AS distinct_queries_run, sum(num_query) AS total_queries_run FROM public.aggr_qli_mentions WHERE date(date) = &apos;2022-05-03&apos; GROUP BY 1;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "407,409"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "403,404"
+                            }
+                        }, {
+                            "content": "Query Counts with Datasource Titles",
+                            "children": [{
+                                "content": "Description: Show distinct and total query counts with datasource names",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "410,411"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, distinct_queries_run, total_queries_run",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "411,412"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "412,413"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, sum(QM.distinct_num_query) AS distinct_queries_run, sum(QM.num_query) AS total_queries_run FROM public.aggr_qli_mentions AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id WHERE date(QM.date) = &apos;2022-05-03&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "413,415"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "409,410"
+                            }
+                        }, {
+                            "content": "Unique Schemas Queried",
+                            "children": [{
+                                "content": "Description: Count unique schemas queried per datasource",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "416,417"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, distinct_queries_run, total_queries_run, num_unique_schemas_queried",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "417,418"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos; AND object_type = &apos;schema&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "418,419"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, sum(QM.distinct_num_query) AS distinct_queries_run, sum(QM.num_query) AS total_queries_run, count(distinct(QM.object_id)) AS num_unique_schemas_queried FROM public.aggr_qli_mentions AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id WHERE date(QM.date) = &apos;2022-05-03&apos; AND QM.object_type = &apos;schema&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "419,421"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "415,416"
+                            }
+                        }, {
+                            "content": "Unique Schemas and Tables Queried",
+                            "children": [{
+                                "content": "Description: Count both unique schemas and tables queried per datasource",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "422,423"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, distinct_queries_run, total_queries_run, num_unique_schemas_queried, num_unique_tables_queried",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "423,424"
+                                }
+                            }, {
+                                "content": "Filter: date = &apos;2022-05-03&apos;, object_type = &apos;schema&apos; AND &apos;table&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "424,425"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QM.ds_id, sum(QM.distinct_num_query) AS distinct_queries_run, sum(QM.num_query) AS total_queries_run, count(distinct(QM.object_id)) AS num_unique_schemas_queried, COUNT(DISTINCT(QM_TB.object_id)) AS num_unique_tables_queried FROM public.aggr_qli_mentions AS QM LEFT JOIN public.rdbms_datasources AS RD ON RD.ds_id = QM.ds_id JOIN public.aggr_qli_mentions AS QM_TB ON QM_TB.ds_id = QM.ds_id WHERE date(QM.date) = &apos;2022-05-03&apos; AND QM.object_type = &apos;schema&apos; AND QM_TB.object_type = &apos;table&apos; GROUP BY 1,2;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "425,427"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "421,422"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "396,397"
+                        }
+                    }, {
+                        "content": "Third Query Tab - Comprehensive QLI Metrics",
+                        "children": [{
+                            "content": "Get Complete QLI Metrics for Datasource by Day",
+                            "children": [{
+                                "content": "Description: Comprehensive QLI analysis with compute time and object counts",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "430,431"
+                                }
+                            }, {
+                                "content": "Returns: title, ds_id, date, total_queries_run, distinct_queries_run, total_rows_queried, total_compute_time_in_seconds, avg_compute_per_query_in_seconds, num_unique_schemas_queried, num_unique_tables_queried",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "431,432"
+                                }
+                            }, {
+                                "content": "Features: Converts compute time from milliseconds to seconds, calculates averages",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "432,433"
+                                }
+                            }, {
+                                "content": "Parameters: Datasource Title, Start Date, End Date",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "433,434"
+                                }
+                            }, {
+                                "content": "Filter: object_type = &apos;schema&apos; AND &apos;table&apos;",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "434,435"
+                                }
+                            }, {
+                                "content": "Order: By date ascending",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "435,436"
+                                }
+                            }, {
+                                "content": "SQL: <code>SELECT RD.title, QME.ds_id, DATE(QME.date) AS date, SUM(QME.num_query) AS total_queries_run, SUM(QM_DS.distinct_num_query) AS distinct_queries_run, SUM(QME.total_rows) AS total_rows_queried, ROUND(SUM(QME.total_time_ms::numeric/1000.0),3) AS total_compute_time_in_seconds, ROUND(AVG((QME.total_time_ms::numeric/1000.0)/QME.num_query),3) AS avg_compute_per_query_in_seconds, COUNT(DISTINCT(QM_SC.object_id)) AS num_unique_schemas_queried, COUNT(DISTINCT(QM_TB.object_id)) AS num_unique_tables_queried FROM public.aggr_qli_metrics AS QME JOIN public.rdbms_datasources AS RD ON QME.ds_id = RD.ds_id JOIN public.aggr_qli_mentions AS QM_DS ON QME.ds_id = QM_DS.ds_id JOIN public.aggr_qli_mentions AS QM_SC ON QME.ds_id = QM_SC.ds_id JOIN public.aggr_qli_mentions AS QM_TB ON QME.ds_id = QM_TB.ds_id WHERE RD.title = &#x24;{ Datasource Title } AND DATE(QME.date) &gt;= &#x24;{ Start Date | E.g. 2020-11-17 } AND DATE(QME.date) &lt;= &#x24;{ End Date | E.g. 2020-11-17 } AND QM_SC.object_type = &apos;schema&apos; AND QM_TB.object_type = &apos;table&apos; GROUP BY 1, 2, 3 ORDER BY 3;</code>",
+                                "children": [],
+                                "payload": {
+                                    "tag": "li",
+                                    "lines": "436,437"
+                                }
+                            }],
+                            "payload": {
+                                "tag": "h4",
+                                "lines": "429,430"
+                            }
+                        }],
+                        "payload": {
+                            "tag": "h3",
+                            "lines": "427,428"
+                        }
+                    }],
+                    "payload": {
+                        "tag": "h2",
+                        "lines": "364,365"
+                    }
+                }],
+                "payload": {
+                    "tag": "h1",
+                    "lines": "2,3"
+                }
+            }
+  } , 
 };
 
 // Variables globales
