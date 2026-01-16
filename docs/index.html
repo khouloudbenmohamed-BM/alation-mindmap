@@ -15,6 +15,7 @@ html {
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* Navigation Menuu */
 #nav-menu {
   position: fixed;
   top: 0;
@@ -66,6 +67,7 @@ html {
   color: white;
 }
 
+/* Toggle button for mobile */
 #menu-toggle {
   display: none;
   position: fixed;
@@ -85,16 +87,16 @@ html {
     transform: translateX(-100%);
     transition: transform 0.3s;
   }
-  
+ 
   #nav-menu.open {
     transform: translateX(0);
   }
-  
+ 
   #mindmap {
     width: 100vw;
     margin-left: 0;
   }
-  
+ 
   #menu-toggle {
     display: block;
   }
@@ -104,12 +106,14 @@ html {
 </head>
 <body>
 
+<!-- Navigation Menu -->
 <button id="menu-toggle">☰ Menu</button>
 <nav id="nav-menu">
   <h2>Mindmaps</h2>
   <div id="nav-items"></div>
 </nav>
 
+<!-- Mindmap SVG -->
 <svg id="mindmap"></svg>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
@@ -117,76 +121,62 @@ html {
 <script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script>
 
 <script>
-const mindmaps = {
-  'alation-help': {
-    title: 'Alation Help Center Quick Start',
-    data: {
-      "content": "Alation Help Center Quick Start",
-      "children": [
-        {
-          "content": "Section 1",
-          "children": [
-            {"content": "Sous-section 1.1"},
-            {"content": "Sous-section 1.2"}
-          ]
-        },
-        {
-          "content": "Section 2",
-          "children": [
-            {"content": "Sous-section 2.1"}
-          ]
-        }
-      ]
-    }
-  }
-};
-
+// Configuration des mindmaps
+// Variables globales
 let currentMarkmap = null;
 let currentToolbar = null;
 
+// Fonction pour charger une mindmap
 function loadMindmap(key) {
   const config = mindmaps[key];
   if (!config) return;
-  
+ 
+  // Mettre à jour l'URL sans recharger la page
   const url = new URL(window.location);
   url.searchParams.set('map', key);
   window.history.pushState({}, '', url);
-  
+ 
+  // Nettoyer l'ancienne mindmap
   document.getElementById('mindmap').innerHTML = '';
   if (currentToolbar) {
     const oldToolbar = document.querySelector('.mm-toolbar');
     if (oldToolbar) oldToolbar.remove();
   }
-  
+ 
+  // Créer la nouvelle mindmap
   const { markmap } = window;
   currentMarkmap = markmap.Markmap.create(
     'svg#mindmap',
     markmap.deriveOptions(),
     config.data
   );
-  
+ 
+  // Ajouter la toolbar
   setTimeout(() => {
     currentToolbar = new markmap.Toolbar();
     currentToolbar.attach(currentMarkmap);
     const toolbarEl = currentToolbar.render();
     toolbarEl.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
     document.body.append(toolbarEl);
-  }, 100);
-  
+  });
+ 
+  // Mettre à jour le menu actif
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.remove('active');
   });
   document.querySelector(`[data-key="${key}"]`)?.classList.add('active');
-  
+ 
+  // Appliquer le thème sombre si nécessaire
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     document.documentElement.classList.add('markmap-dark');
   }
 }
 
+// Générer le menu de navigation
 function generateNav() {
   const navItems = document.getElementById('nav-items');
   navItems.innerHTML = '';
-  
+ 
   Object.keys(mindmaps).forEach(key => {
     const div = document.createElement('div');
     div.className = 'nav-item';
@@ -197,17 +187,22 @@ function generateNav() {
   });
 }
 
+// Toggle menu mobile
 document.getElementById('menu-toggle').onclick = function() {
   document.getElementById('nav-menu').classList.toggle('open');
 };
 
+// Initialisation
 window.addEventListener('DOMContentLoaded', () => {
   generateNav();
+ 
+  // Charger la mindmap depuis l'URL ou la première par défaut
   const urlParams = new URLSearchParams(window.location.search);
   const mapKey = urlParams.get('map') || Object.keys(mindmaps)[0];
   loadMindmap(mapKey);
 });
 
+// Gérer le bouton retour du navigateur
 window.addEventListener('popstate', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const mapKey = urlParams.get('map') || Object.keys(mindmaps)[0];
